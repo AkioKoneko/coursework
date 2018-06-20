@@ -1,6 +1,8 @@
 #ifndef PHONE_HPP
 #define PHONE_HPP
 
+#include <fstream>
+
 using mm = short;
 using MHz = short;
 using MB = short;
