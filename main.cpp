@@ -1,9 +1,11 @@
+#include <list>
 #include <iostream>
 #include "phone.hpp"
 
 int main()
 {
 	char c;
+	std::list<Phone> phones;
 
 	do
 	{
@@ -19,26 +21,33 @@ int main()
 
 		if (c == 'L')
 		{
-			std::cout << "Загрузка...\n";
+			std::cout << "Загрузка...\n"; // TODO
 			std::cin.ignore();
 		}
 
 		else if (c == 'P')
 		{
-			std::cout << "Печать...\n";
-			std::cin.ignore();
+			for (auto &p : phones)
+			{
+				p.Print();
+				std::cout << '\n';
+			}
 		}
 
 		if (c == 'E')
 		{
-			std::cout << "Редактирование...\n";
+			std::cout << "Редактирование...\n"; // TODO
 			std::cin.ignore();
 		}
 
 		else if (c == 'S')
 		{
-			std::cout << "Сохранение...\n";
-			std::cin.ignore();
+			std::string filename;
+			std::cout << "Имя файла: ";
+			std::cin >> filename;
+
+			for (auto &p : phones)
+				p.Save(filename);
 		}
 	}
 	while (c != 'Q');

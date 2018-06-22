@@ -22,8 +22,8 @@ public:
 	const inline auto & CommType()     const { return comm_type; }
 	const inline auto & Color()        const { return color;     }
 
-	virtual void Print(std::ostream &out = std::cout);
-	void Save(std::string filename);
+	virtual const void Print(std::ostream &out = std::cout);
+	void const Save(const std::string filename);
 };
 
 class LandlinePhone : public Phone
@@ -48,7 +48,7 @@ public:
 	inline MHz  CPUFreqency()    const { return cpu_frequency;        }
 	inline MB   MemorySize()     const { return memory_size;          }
 
-	virtual void Print(std::ostream &out = std::cout);
+	virtual const void Print(std::ostream &out = std::cout);
 };
 
 class Smartphone : public MobilePhone
@@ -59,7 +59,7 @@ public:
 	inline bool HasCamera() const { return camera_mp != 0; }
 	inline auto CameraMP()  const { return camera_mp;      }
 
-	virtual void Print(std::ostream &out = std::cout);
+	virtual const void Print(std::ostream &out = std::cout);
 };
 
 class SatellitePhone : public MobilePhone
