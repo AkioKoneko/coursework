@@ -2,10 +2,13 @@
 #define PHONE_HPP
 
 #include <fstream>
+#include <iostream>
 
 using mm = short;
 using MHz = short;
 using MB = short;
+
+constexpr const char * btos(bool arg) { return arg ? "Есть" : "Нет"; }
 
 class Phone
 {
@@ -14,9 +17,11 @@ class Phone
 	std::string comm_type;
 
 public:
-	      auto ProductionYear() const { return prod_year; }
-	const auto & CommType()     const { return comm_type; }
-	const auto & Color()        const { return color;     }
+	      inline auto ProductionYear() const { return prod_year; }
+	const inline auto & CommType()     const { return comm_type; }
+	const inline auto & Color()        const { return color;     }
+
+	virtual void Print(std::ostream &out = std::cout);
 };
 
 class LandlinePhone : public Phone
@@ -32,16 +37,16 @@ class MobilePhone : public Phone
 	MB memory_size;
 
 public:
-	bool HasGPS()         const { return has_gps;              }
-	bool HasGLONASS()     const { return has_glonass;          }
-	bool HasWiFi()        const { return has_wifi;             }
-	bool Has4G()          const { return has_4g;               }
-	bool HasCamera()      const { return camera_mp != 0;       }
-	bool HasScreen()      const { return screen_diagonal != 0; }
-	auto CameraMP()       const { return camera_mp;            }
-	mm   ScreenDiagonal() const { return screen_diagonal;      }
-	MHz  CPUFreqency()    const { return cpu_frequency;        }
-	MB   MemorySize()     const { return memory_size;          }
+	inline bool HasGPS()         const { return has_gps;              }
+	inline bool HasGLONASS()     const { return has_glonass;          }
+	inline bool HasWiFi()        const { return has_wifi;             }
+	inline bool Has4G()          const { return has_4g;               }
+	inline bool HasScreen()      const { return screen_diagonal != 0; }
+	inline mm   ScreenDiagonal() const { return screen_diagonal;      }
+	inline MHz  CPUFreqency()    const { return cpu_frequency;        }
+	inline MB   MemorySize()     const { return memory_size;          }
+
+	virtual void Print(std::ostream &out = std::cout);
 };
 
 class Smartphone : public MobilePhone
@@ -49,7 +54,10 @@ class Smartphone : public MobilePhone
 	float camera_mp;
 
 public:
-	auto CameraMP() const { return camera_mp; }
+	inline bool HasCamera() const { return camera_mp != 0; }
+	inline auto CameraMP()  const { return camera_mp;      }
+
+	virtual void Print(std::ostream &out = std::cout);
 };
 
 class SatellitePhone : public MobilePhone
