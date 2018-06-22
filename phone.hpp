@@ -1,6 +1,7 @@
 #ifndef PHONE_HPP
 #define PHONE_HPP
 
+#include <string>
 #include <fstream>
 #include <iostream>
 
@@ -22,6 +23,7 @@ public:
 	const inline auto & Color()        const { return color;     }
 
 	virtual void Print(std::ostream &out = std::cout);
+	void Save(std::string filename);
 };
 
 class LandlinePhone : public Phone

@@ -30,3 +30,9 @@ void Smartphone::Print(std::ostream &out)
 	if (HasCamera())
 		out << "Разрешение матрицы: " << camera_mp << " MP\n";
 }
+
+void Phone::Save(std::string filename)
+{
+	std::ofstream file(filename);
+	Print(file);
+}
