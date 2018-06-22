@@ -42,12 +42,8 @@ int main()
 
 		else if (c == 'S')
 		{
-			std::string filename;
-			std::cout << "Имя файла: ";
-			std::cin >> filename;
-
 			for (auto &p : phones)
-				p.Save(filename);
+				p.Save("output.txt");
 		}
 	}
 	while (c != 'Q');

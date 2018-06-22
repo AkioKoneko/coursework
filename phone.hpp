@@ -1,9 +1,11 @@
 #ifndef PHONE_HPP
 #define PHONE_HPP
 
+#include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <functional>
 
 using mm = short;
 using MHz = short;
@@ -22,8 +24,10 @@ public:
 	const inline auto & CommType()     const { return comm_type; }
 	const inline auto & Color()        const { return color;     }
 
-	virtual const void Print(std::ostream &out = std::cout);
-	void const Save(const std::string filename);
+	virtual void Print(std::ostream &out = std::cout) const;
+	void Save(const std::string filename) const; // TODO: Class names
+
+	void Load(const std::string filename); // TODO
 };
 
 class LandlinePhone : public Phone
@@ -48,7 +52,7 @@ public:
 	inline MHz  CPUFreqency()    const { return cpu_frequency;        }
 	inline MB   MemorySize()     const { return memory_size;          }
 
-	virtual const void Print(std::ostream &out = std::cout);
+	virtual void Print(std::ostream &out = std::cout) const;
 };
 
 class Smartphone : public MobilePhone
@@ -59,12 +63,22 @@ public:
 	inline bool HasCamera() const { return camera_mp != 0; }
 	inline auto CameraMP()  const { return camera_mp;      }
 
-	virtual const void Print(std::ostream &out = std::cout);
+	virtual void Print(std::ostream &out = std::cout) const;
 };
 
 class SatellitePhone : public MobilePhone
 {
 
+};
+
+template <typename T>
+Phone * PhoneFactory() { return new T; }
+
+const std::map<std::string, std::function<Phone*()>> NewPhone =
+{
+	{ "Smartphone"    , PhoneFactory<Smartphone>     },
+	{ "LandlinePhone" , PhoneFactory<LandlinePhone>  },
+	{ "SatellitePhone", PhoneFactory<SatellitePhone> }
 };
 
 #endif

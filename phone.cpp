@@ -1,13 +1,13 @@
 #include "phone.hpp"
 
-const void Phone::Print(std::ostream &out)
+void Phone::Print(std::ostream &out) const
 {
 	out << "Год производства: " << prod_year << '\n';
 	out << "Цвет: " << color << '\n';
 	out << "Тип связи: " << comm_type << '\n';
 }
 
-const void MobilePhone::Print(std::ostream &out)
+void MobilePhone::Print(std::ostream &out) const
 {
 	Phone::Print(out);
 
@@ -22,7 +22,7 @@ const void MobilePhone::Print(std::ostream &out)
 	out << "Объем памяти: " << memory_size << " MB\n";
 }
 
-const void Smartphone::Print(std::ostream &out)
+void Smartphone::Print(std::ostream &out) const
 {
 	MobilePhone::Print(out);
 
@@ -31,7 +31,7 @@ const void Smartphone::Print(std::ostream &out)
 		out << "Разрешение матрицы: " << camera_mp << " MP\n";
 }
 
-const void Phone::Save(const std::string filename)
+void Phone::Save(const std::string filename) const
 {
 	std::ofstream file(filename, std::ios_base::app);
 	Print(file);
