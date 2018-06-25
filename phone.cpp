@@ -5,9 +5,9 @@ Phone::Phone(std::ifstream &in)
 	skip_colon(in);
 	in >> prod_year;
 	skip_colon(in);
-	in.getline(color);
+	std::getline(in, color);
 	skip_colon(in);
-	in.getline(comm_type);
+	std::getline(in, comm_type);
 }
 
 MobilePhone::MobilePhone(std::ifstream &in) : Phone(in)
@@ -44,7 +44,7 @@ MobilePhone::MobilePhone(std::ifstream &in) : Phone(in)
 	in >> memory_size;
 }
 
-Smartphone(std::ifstream &in) : MobilePhone(in)
+Smartphone::Smartphone(std::ifstream &in) : MobilePhone(in)
 {
 	std::string has_camera;
 	skip_colon(in);

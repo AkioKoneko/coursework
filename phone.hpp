@@ -85,9 +85,9 @@ public:
 };
 
 template <typename T>
-inline Phone * PhoneFactory() { return new T; }
+inline Phone * PhoneFactory(std::ifstream &in) { return new T(in); }
 
-std::map<std::string, std::function<Phone*()>> NewPhone =
+static std::map<std::string, std::function<Phone*(std::ifstream &)>> NewPhone =
 {
 	{ "Smartphone"    , PhoneFactory<Smartphone>     },
 	{ "LandlinePhone" , PhoneFactory<LandlinePhone>  },
@@ -107,10 +107,10 @@ class PhoneIterator
 	std::string type;
 	bool is_end;
 
+public:
 	inline PhoneIterator(std::ifstream &f, bool e = false)
 		: file(f), is_end(e) {}
 
-public:
 	using value_type = Phone *;
 	using difference_type = int;
 	using pointer = Phone **;
