@@ -1,0 +1,4 @@
+LandlinePhone
+Год производства: 1999
+Цвет: green
+Тип связи: optical fiber
