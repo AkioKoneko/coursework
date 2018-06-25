@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <functional>
+#include <cctype>
 
 using mm = short;
 using MHz = short;
@@ -20,19 +21,23 @@ class Phone
 	std::string comm_type;
 
 public:
+	Phone(std::ifstream &in);
+
 	      inline auto ProductionYear() const { return prod_year; }
 	const inline auto & CommType()     const { return comm_type; }
 	const inline auto & Color()        const { return color;     }
 
+	virtual const char * ClassName() const { return ""; }
 	virtual void Print(std::ostream &out = std::cout) const;
-	void Save(const std::string filename) const; // TODO: Class names
-
-	void Load(const std::string filename); // TODO
+	void Save(const std::string filename) const;
 };
 
 class LandlinePhone : public Phone
 {
+	virtual const char * ClassName() const { return "LandlinePhone"; }
 
+public:
+	LandlinePhone(std::ifstream &in) : Phone(in) {}
 };
 
 class MobilePhone : public Phone
@@ -43,6 +48,8 @@ class MobilePhone : public Phone
 	MB memory_size;
 
 public:
+	MobilePhone(std::ifstream &in);
+
 	inline bool HasGPS()         const { return has_gps;              }
 	inline bool HasGLONASS()     const { return has_glonass;          }
 	inline bool HasWiFi()        const { return has_wifi;             }
@@ -60,25 +67,92 @@ class Smartphone : public MobilePhone
 	float camera_mp;
 
 public:
+	Smartphone(std::ifstream &in);
+
 	inline bool HasCamera() const { return camera_mp != 0; }
 	inline auto CameraMP()  const { return camera_mp;      }
 
+	virtual const char * ClassName() { return "Smartphone"; }
 	virtual void Print(std::ostream &out = std::cout) const;
 };
 
 class SatellitePhone : public MobilePhone
 {
+	virtual const char * ClassName() const { return "SatellitePhone"; }
 
+public:
+	SatellitePhone(std::ifstream &in) : MobilePhone(in) {}
 };
 
 template <typename T>
-Phone * PhoneFactory() { return new T; }
+inline Phone * PhoneFactory() { return new T; }
 
-const std::map<std::string, std::function<Phone*()>> NewPhone =
+std::map<std::string, std::function<Phone*()>> NewPhone =
 {
 	{ "Smartphone"    , PhoneFactory<Smartphone>     },
 	{ "LandlinePhone" , PhoneFactory<LandlinePhone>  },
 	{ "SatellitePhone", PhoneFactory<SatellitePhone> }
+};
+
+bool nws_left(std::istream &in);
+
+inline void skip_colon(std::ifstream &in)
+{
+	do in.get(); while (in.peek() != ':');
+}
+
+class PhoneIterator
+{
+	std::ifstream &file;
+	std::string type;
+	bool is_end;
+
+	inline PhoneIterator(std::ifstream &f, bool e = false)
+		: file(f), is_end(e) {}
+
+public:
+	using value_type = Phone *;
+	using difference_type = int;
+	using pointer = Phone **;
+	using reference = Phone *&;
+	using iterator_category	= std::input_iterator_tag;
+
+	inline bool operator!=(const PhoneIterator &other) const
+	{
+		return (is_end ^ other.is_end);
+	}
+
+	inline bool operator==(const PhoneIterator &other) const
+	{
+		return !(*this != other);
+	}
+
+	inline PhoneIterator operator++()
+	{
+		is_end = !nws_left(file);
+		if (!is_end)
+			file >> type;
+		return *this;
+	}
+
+	inline PhoneIterator operator++(int)
+	{
+		PhoneIterator old = *this;
+		++(*this);
+		return old;
+	}
+
+	inline value_type operator*() { return NewPhone[type](file); }
+};
+
+class PhoneLoader
+{
+	std::ifstream file;
+
+public:
+	inline PhoneLoader(const std::string filename) : file(filename) {}
+	inline auto begin() { return PhoneIterator(file); };
+	inline auto end() { return PhoneIterator(file, true); };
 };
 
 #endif

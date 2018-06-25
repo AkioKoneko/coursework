@@ -1,11 +1,12 @@
 #include <list>
+#include <memory>
 #include <iostream>
 #include "phone.hpp"
 
 int main()
 {
 	char c;
-	std::list<Phone> phones;
+	std::list<std::unique_ptr<Phone>> phones;
 
 	do
 	{
@@ -13,7 +14,6 @@ int main()
 
 		std::cout << "L: Загрузить данные из файла\n"
 		          << "P: Вывести данные на экран\n"
-		          << "E: Отредактировть данные\n"
 		          << "S: Сохранить данные в файл\n"
 		          << "Q: Выход\n\n";
 
@@ -21,29 +21,23 @@ int main()
 
 		if (c == 'L')
 		{
-			std::cout << "Загрузка...\n"; // TODO
-			std::cin.ignore();
+			for (auto &&p : PhoneLoader("output.txt"))
+				phones.emplace_back(p);
 		}
 
 		else if (c == 'P')
 		{
 			for (auto &p : phones)
 			{
-				p.Print();
+				p->Print();
 				std::cout << '\n';
 			}
-		}
-
-		if (c == 'E')
-		{
-			std::cout << "Редактирование...\n"; // TODO
-			std::cin.ignore();
 		}
 
 		else if (c == 'S')
 		{
 			for (auto &p : phones)
-				p.Save("output.txt");
+				p->Save("output.txt");
 		}
 	}
 	while (c != 'Q');
