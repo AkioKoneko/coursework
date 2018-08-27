@@ -93,6 +93,7 @@ void Phone::Save(const std::string filename) const
 	std::ofstream file(filename, std::ios_base::app);
 	file << ClassName() << '\n';
 	Print(file);
+	file << '\n';
 }
 
 bool nws_left(std::istream &in)

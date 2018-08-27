@@ -21,7 +21,7 @@ int main()
 
 		if (c == 'L')
 		{
-			for (auto &&p : PhoneLoader("output.txt"))
+			for (auto &&p : PhoneLoader("input.txt"))
 				phones.emplace_back(p);
 		}
 
