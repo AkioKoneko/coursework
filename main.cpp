@@ -23,6 +23,7 @@ int main()
 		{
 			for (auto &&p : PhoneLoader("input.txt"))
 				phones.emplace_back(p);
+			std::cout << "Данные успешно загружены" << '\n';
 		}
 
 		else if (c == 'P')
@@ -38,6 +39,7 @@ int main()
 		{
 			for (auto &p : phones)
 				p->Save("output.txt");
+			std::cout << "Данные сохранены в файл" << '\n';
 		}
 	}
 	while (c != 'Q');
